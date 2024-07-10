@@ -1,3 +1,16 @@
+# Function to delete a directory if it exists
+function Delete-Directory {
+    param (
+        [string]$Path
+    )
+    if (Test-Path -Path $Path) {
+        Remove-Item -Path $Path -Recurse -Force
+        Write-Output "Deleted directory: $Path"
+    } else {
+        Write-Output "Directory does not exist: $Path"
+    }
+}
+
 # Function to create a directory if it doesn't exist
 function Create-Directory {
     param (
@@ -11,9 +24,10 @@ function Create-Directory {
     }
 }
 
-# Function to create the .git-templates directory
+# Function to delete and then create the .git-templates directory
 function Create-GitTemplatesDirectory {
     $gitTemplatesPath = "$env:userprofile\.git-templates"
+    Delete-Directory -Path $gitTemplatesPath
     Create-Directory -Path $gitTemplatesPath
     return $gitTemplatesPath
 }
